@@ -38,7 +38,7 @@ defmodule ElixirLGE.Window do
     # Periodically send a message to trigger a redraw of the scene
     timer = :timer.send_interval(20, self(), :update)
 
-    {frame, %{canvas: canvas, timer: timer, x: 0, y: 0}}
+    {frame, %{canvas: canvas, timer: timer, boids: []}}
   end
 
   def code_change(_, _, state) do
@@ -63,8 +63,8 @@ defmodule ElixirLGE.Window do
     {:stop, :normal, state}
   end
 
- def handle_info(%{x: x, y: y}, state) do
-    {:noreply, %{state | x: x, y: y}}
+  def handle_info(%{data: boids}, state) do
+    {:noreply, %{state | boids: boids}}
   end
 
   def handle_info(:update, state) do
@@ -118,18 +118,22 @@ defmodule ElixirLGE.Window do
   #   :ok
   # end
 
-  defp draw(x, y) do
+  defp draw(boids) do
     :gl.clear(Bitwise.bor(:gl_const.gl_color_buffer_bit, :gl_const.gl_depth_buffer_bit))
     :gl.loadIdentity()
     :gl.begin(:gl_const.gl_points)
     :gl.color4f(0.9725, 0.9725, 0.949, 1)
-    :gl.vertex2f(x, y)
+    Enum.each(boids, fn boid -> draw_boid(boid) end)
     :gl.end()
     :ok
   end
 
-  defp render(%{canvas: canvas, x: x, y: y} = _state) do
-    draw(x, y)
+  defp draw_boid(%{x: x, y: y}) do
+    :gl.vertex2f(x, y)
+  end
+
+  defp render(%{canvas: canvas, boids: boids} = _state) do
+    draw(boids)
     :wxGLCanvas.swapBuffers(canvas)
     :ok
   end
