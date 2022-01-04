@@ -27,9 +27,13 @@ end
 defmodule ElixirLGE.Boids do
   use GenServer
 
+  def update(type, val) do
+    GenServer.cast(__MODULE__, {type, val})
+  end
+
   # Callbacks
   def start_link(pid) do
-    GenServer.start_link(__MODULE__, pid, [])
+    GenServer.start_link(__MODULE__, pid, name: __MODULE__)
   end
 
   @impl true
@@ -50,6 +54,25 @@ defmodule ElixirLGE.Boids do
     Process.sleep(loop_state.timestep_milli)
     GenServer.cast(self(), :update)
     {:noreply, %{loop_state | boids: updated_boids}}
+  end
+
+  def handle_cast({:anti_collide_scale, val}, loop_state) do
+    {:noreply, %{loop_state | anti_collide_scale: val}}
+  end
+  def handle_cast({:velocity_match_scale, val}, loop_state) do
+    {:noreply, %{loop_state | velocity_match_scale: val}}
+  end
+  def handle_cast({:perceived_center_scale, val}, loop_state) do
+    {:noreply, %{loop_state | perceived_center_scale: val}}
+  end
+  def handle_cast({:bound_scale, val}, loop_state) do
+    {:noreply, %{loop_state | bound_scale: val}}
+  end
+  def handle_cast({:length_away_group_sqr, val}, loop_state) do
+    {:noreply, %{loop_state | length_away_group_sqr: val}}
+  end
+  def handle_cast({:length_away_min_sqr, val}, loop_state) do
+    {:noreply, %{loop_state | length_away_min_sqr: val}}
   end
 
   def create_boids(amount) do
