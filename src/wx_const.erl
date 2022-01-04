@@ -26,3 +26,12 @@ wx_gl_min_blue() ->
   
 wx_gl_depth_size() ->
   ?WX_GL_DEPTH_SIZE.
+
+wx_vertical() ->
+  ?wxVERTICAL.
+
+wx_expand() ->
+  ?wxEXPAND.
+
+wx_all() ->
+  ?wxALL.

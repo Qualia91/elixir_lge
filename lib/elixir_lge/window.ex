@@ -128,8 +128,8 @@ defmodule ElixirLGE.Window do
     :ok
   end
 
-  defp draw_boid(%{x: x, y: y}) do
-    :gl.vertex2f(x, y)
+  defp draw_boid(boid) do
+    :gl.vertex2f(boid.pos.x, boid.pos.y)
   end
 
   defp render(%{canvas: canvas, boids: boids} = _state) do

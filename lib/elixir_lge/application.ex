@@ -9,6 +9,7 @@ defmodule ElixirLGE.Application do
   def start(_type, _args) do
 
     {_, _, _, pid} = ElixirLGE.Window.start_link
+    ElixirLGE.Gui.start_link
 
     children = [
       # Starts a worker by calling: App.Worker.start_link(arg)
