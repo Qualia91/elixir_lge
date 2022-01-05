@@ -1,3 +1,18 @@
+defmodule Mix.Tasks.Compile.ElixirLGE do
+  def run(_args) do
+    {result, _errcode} = System.cmd("gcc",
+      [
+        "-I", "E:/erlang/erl-23.3/erts-11.2/include",
+        "--std=c++11",
+        "-m64",
+        "-shared",
+        "-o", "dll/test.dll",
+        "native_lib/test.c"
+      ], stderr_to_stdout: true)
+    IO.puts(result)
+  end
+end
+
 defmodule ElixirLGE.MixProject do
   use Mix.Project
 
@@ -7,7 +22,8 @@ defmodule ElixirLGE.MixProject do
       version: "0.1.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      compilers: [:ElixirLGE] ++ Mix.compilers
     ]
   end
 

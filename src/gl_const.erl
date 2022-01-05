@@ -35,3 +35,27 @@ gl_projection() ->
 
 gl_modelview() ->
   ?GL_MODELVIEW.
+
+gl_array_buffer() ->
+  ?GL_ARRAY_BUFFER.
+
+gl_static_draw() ->
+  ?GL_STATIC_DRAW.
+
+gl_vertex_array() ->
+  ?GL_VERTEX_ARRAY.
+
+gl_float() ->
+  ?GL_FLOAT.
+
+gl_dynamic_draw() ->
+  ?GL_DYNAMIC_DRAW.
+
+gl_vertex_shader() ->
+  ?GL_VERTEX_SHADER.
+
+gl_fragment_shader() ->
+  ?GL_FRAGMENT_SHADER.
+
+gl_info_log_length() ->
+  ?GL_INFO_LOG_LENGTH.

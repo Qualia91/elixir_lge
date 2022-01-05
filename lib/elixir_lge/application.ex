@@ -1,3 +1,15 @@
+defmodule Test do
+  @on_load :load_nifs
+
+  def load_nifs do
+    :erlang.load_nif('./dll/test', 0)
+  end
+
+  def add(_a, _b) do
+    raise "NIF add/2 not implemented"
+  end
+end
+
 defmodule ElixirLGE.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
@@ -7,6 +19,8 @@ defmodule ElixirLGE.Application do
 
   @impl true
   def start(_type, _args) do
+
+    IO.inspect Test.add(1,2), label: "This was calculated in the dll"
 
     {_, _, _, pid} = ElixirLGE.Window.start_link
     ElixirLGE.Gui.start_link
