@@ -17,12 +17,12 @@ defmodule VulkanRenderer do
     :erlang.load_nif('./dll/vulkan_renderer', 0)
   end
 
-  def create_renderer(_width, _height) do
-    raise "NIF create_renderer/2 not implemented"
+  def create_renderer() do
+    raise "NIF create_renderer/3 not implemented"
   end
 
-  def run(_renderer) do
-    raise "NIF run/1 not implemented"
+  def run(_renderer, _width, _height, _device_index) do
+    raise "NIF run/4 not implemented"
   end
 end
 
@@ -37,8 +37,8 @@ defmodule ElixirLGE.Application do
   def start(_type, _args) do
 
     IO.inspect Test.add(1,2), label: "This was calculated in the dll"
-    {:ok, renderer} = VulkanRenderer.create_renderer(800, 600)
-    IO.inspect VulkanRenderer.run(renderer), label: "Renderer Return Error Code: "
+    {:ok, renderer} = VulkanRenderer.create_renderer()
+    IO.inspect VulkanRenderer.run(renderer, 800, 600, 0), label: "Renderer Return Error Code: "
 
     # {_, _, _, pid} = ElixirLGE.Window.start_link
     # ElixirLGE.Gui.start_link
