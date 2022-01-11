@@ -8,7 +8,7 @@ defmodule ElixirLGE.Gui do
   #######
   # API #
   #######
-  def start_link() do
+  def start_link(config) do
     :wx_object.start_link(__MODULE__, [], [])
   end
 

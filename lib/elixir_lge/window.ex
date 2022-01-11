@@ -5,11 +5,16 @@ defmodule ElixirLGE.Window do
   @title 'Elixir OpenGL'
   @size {800, 800}
 
+
+  def boid_update(boids) do
+    GenServer.cast(__MODULE__, %{data: boids})
+  end
+
   #######
   # API #
   #######
   def start_link() do
-    :wx_object.start_link(__MODULE__, [], [])
+    :wx_object.start_link({:local, __MODULE__}, __MODULE__, [], [])
   end
 
   #################################
@@ -45,6 +50,11 @@ defmodule ElixirLGE.Window do
     {:stop, :not_implemented, state}
   end
 
+
+  def handle_cast(%{data: boids}, state) do
+    {:noreply, %{state | boids: boids}}
+  end
+
   def handle_cast(msg, state) do
     IO.puts "Cast:"
     IO.inspect msg
@@ -63,12 +73,14 @@ defmodule ElixirLGE.Window do
     {:stop, :normal, state}
   end
 
-  def handle_info(%{data: boids}, state) do
-    {:noreply, %{state | boids: boids}}
-  end
-
   def handle_info(:update, state) do
     :wx.batch(fn -> render(state) end)
+    {:noreply, state}
+  end
+
+  def handle_info(msg, state) do
+    IO.puts "Info:"
+    IO.inspect msg
     {:noreply, state}
   end
 

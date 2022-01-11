@@ -8,9 +8,9 @@ defmodule Boid do
 end
 
 defmodule LoopState do
-  @enforce_keys [:pid]
+  @enforce_keys [:endpoint]
   defstruct [
-    :pid,
+    :endpoint,
     length_away_group_sqr: 0.005,
     length_away_min_sqr: 0.001,
     timestep: 0.033,
@@ -31,14 +31,14 @@ defmodule ElixirLGE.Boids do
   end
 
   # Callbacks
-  def start_link(pid) do
-    GenServer.start_link(__MODULE__, pid, name: __MODULE__)
+  def start_link(endpoint) do
+    GenServer.start_link(__MODULE__, endpoint, name: __MODULE__)
   end
 
   @impl true
-  def init(pid) do
+  def init(endpoint) do
     GenServer.cast(self(), :update)
-    {:ok, %LoopState{boids: create_boids(100), pid: pid}}
+    {:ok, %LoopState{boids: create_boids(100), endpoint: endpoint}}
   end
 
   @impl true
@@ -49,7 +49,7 @@ defmodule ElixirLGE.Boids do
   @impl true
   def handle_cast(:update, loop_state) do
     updated_boids = update_boids(loop_state)
-    send(loop_state.pid, %{data: updated_boids})
+    loop_state.endpoint.boid_update(updated_boids)
     Process.sleep(loop_state.timestep_milli)
     GenServer.cast(self(), :update)
     {:noreply, %{loop_state | boids: updated_boids}}

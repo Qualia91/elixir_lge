@@ -9,7 +9,18 @@ defmodule Mix.Tasks.Compile.ElixirLGE do
         "-o", "dll/test.dll",
         "native_lib/test.c"
       ], stderr_to_stdout: true)
-    IO.puts(result)
+      IO.puts(result)
+
+      {result, _errcode} = System.cmd("gcc",
+      [
+        "-I", "E:/erlang/erl-23.3/erts-11.2/include",
+        "--std=c++11",
+        "-m64",
+        "-shared",
+        "-o", "dll/csystem.dll",
+        "native_lib/csystem.c"
+      ], stderr_to_stdout: true)
+      IO.puts(result)
   end
 end
 
@@ -30,7 +41,7 @@ defmodule ElixirLGE.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :gproc],
       mod: {ElixirLGE.Application, []}
     ]
   end
@@ -40,6 +51,7 @@ defmodule ElixirLGE.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:gproc, "0.3.1"}
     ]
   end
 end
